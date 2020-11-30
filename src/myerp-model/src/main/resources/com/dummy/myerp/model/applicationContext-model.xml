@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+      <!-- ========== Model ========== -->
+<bean id="compteComptable" class="com.dummy.myerp.model.bean.comptabilite.CompteComptable"></bean>
+<bean id="ecritureComptable" class="com.dummy.myerp.model.bean.comptabilite.EcritureComptable"></bean>
+<bean id="journalComptable" class="com.dummy.myerp.model.bean.comptabilite.JournalComptable"></bean>
+<bean id="ligneEcritureComptable" class="com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable"></bean>
+<bean id="sequenceEcritureComptable" class="com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable"></bean>
+
+<!-- ========== Technical ========== -->
+<import resource="classpath*:com/dummy/myerp/technical/applicationContext-technical.xml" />
+
+</beans>
