@@ -39,6 +39,7 @@ public abstract class AbstractBusinessManager {
         transactionManager = pTransactionManager;
     }
 
+    // OLD VERSION  = PROTECTED WITHOUT STATIC ON ALL METHODS
 
     // ==================== Getters/Setters ====================
 
@@ -47,7 +48,7 @@ public abstract class AbstractBusinessManager {
      *
      * @return {@link BusinessProxy}
      */
-    protected BusinessProxy getBusinessProxy() {
+    public BusinessProxy getBusinessProxy() {
         return businessProxy;
     }
 
@@ -57,7 +58,7 @@ public abstract class AbstractBusinessManager {
      *
      * @return {@link DaoProxy}
      */
-    protected DaoProxy getDaoProxy() {
+    public DaoProxy getDaoProxy() {
         return daoProxy;
     }
 
@@ -67,7 +68,7 @@ public abstract class AbstractBusinessManager {
      *
      * @return TransactionManager
      */
-    protected TransactionManager getTransactionManager() {
+    public TransactionManager getTransactionManager() {
         return transactionManager;
     }
 
@@ -77,7 +78,7 @@ public abstract class AbstractBusinessManager {
      *
      * @return Validator
      */
-    protected Validator getConstraintValidator() {
+    public Validator getConstraintValidator() {
         Configuration<?> vConfiguration = Validation.byDefaultProvider().configure();
         ValidatorFactory vFactory = vConfiguration.buildValidatorFactory();
         Validator vValidator = vFactory.getValidator();

@@ -23,7 +23,12 @@ public class JournalComptableTest {
     public void testGetByCode() {
 
         List<JournalComptable> pList = new ArrayList<JournalComptable>();
-        JournalComptable j = new JournalComptable("1", "test");
+        JournalComptable j = new JournalComptable();
+
+        j.setCode("1");
+        j.setLibelle("est");
+        j.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
+
         pList.add(j);
 
         String pCode = "1";
@@ -42,7 +47,11 @@ public class JournalComptableTest {
     public void testGetByCodeNoFound() {
 
         List<JournalComptable> pList = new ArrayList<JournalComptable>();
-        JournalComptable j = new JournalComptable("1", "test");
+        JournalComptable j = new JournalComptable();
+
+        j.setCode("1");
+        j.setLibelle("est");
+        j.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
         pList.add(j);
 
         String pCode = "0";

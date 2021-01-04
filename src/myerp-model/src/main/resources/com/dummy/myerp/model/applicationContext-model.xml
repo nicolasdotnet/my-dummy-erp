@@ -12,6 +12,6 @@
 <bean id="sequenceEcritureComptable" class="com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable"></bean>
 
 <!-- ========== Technical ========== -->
-<import resource="classpath*:com/dummy/myerp/technical/applicationContext-technical.xml" />
+<import resource="classpath*:com/dummy/myerp/technical/applicationContext-technical.xml"/>
 
 </beans>

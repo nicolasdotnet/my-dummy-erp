@@ -1,6 +1,13 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Set;
+import javax.validation.Configuration;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Assert;
@@ -18,6 +25,36 @@ public class EcritureComptableTest {
                 vLibelle,
                 vDebit, vCredit);
         return vRetour;
+    }
+
+    @Test
+    public void testValidatorPattern() {
+
+        JournalComptable vJournalComptable;
+        vJournalComptable = new JournalComptable();
+        vJournalComptable.setCode("AC");
+        vJournalComptable.setLibelle("Achat");
+        
+        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
+
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();
+        vEcriture.setJournal(vJournalComptable);
+        vEcriture.setDate(new Date());
+        vEcriture.setReference("AC-2020/00001");
+        vEcriture.setLibelle("Libelle");
+
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", null));
+
+        Configuration<?> vConfiguration = Validation.byDefaultProvider().configure();
+        ValidatorFactory vFactory = vConfiguration.buildValidatorFactory();
+        Validator vValidator = vFactory.getValidator();
+
+        Set<ConstraintViolation<EcritureComptable>> r = vValidator.validate(vEcriture);
+
+        Assert.assertEquals(0, r.size());
+
     }
 
     /**
