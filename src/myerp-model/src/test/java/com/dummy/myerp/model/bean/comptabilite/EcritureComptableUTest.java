@@ -13,7 +13,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EcritureComptableTest {
+public class EcritureComptableUTest {
 
     // un ensemble de ligne d'écriture constitut une écriture comptable
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
@@ -27,6 +27,9 @@ public class EcritureComptableTest {
         return vRetour;
     }
 
+    /**
+     * Test of validation Pattern, of class EcritureComptable.
+     */
     @Test
     public void testValidatorPattern() {
 
@@ -34,8 +37,6 @@ public class EcritureComptableTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcriture;
         vEcriture = new EcritureComptable();

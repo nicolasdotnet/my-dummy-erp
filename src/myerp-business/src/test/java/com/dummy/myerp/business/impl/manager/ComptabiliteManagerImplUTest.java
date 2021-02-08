@@ -10,29 +10,22 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
-import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ComptabiliteManagerImplTest {
+public class ComptabiliteManagerImplUTest {
 
     private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
 
@@ -51,6 +44,10 @@ public class ComptabiliteManagerImplTest {
     @Rule
     public ExpectedException thrownException = ExpectedException.none();
 
+    /**
+     * Test of checkEcritureComptableUnit method, of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
     public void checkEcritureComptableUnit() throws Exception {
 
@@ -58,7 +55,6 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -83,6 +79,11 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : Vérification des
+     * contraintes unitaires sur les attributs de l'écriture), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
     public void checkEcritureComptableUnitViolation() throws Exception {
 
@@ -94,6 +95,10 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG2), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
     public void checkEcritureComptableUnitRG2() throws Exception {
 
@@ -104,7 +109,6 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -120,18 +124,69 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG3), of class
+     * ComptabiliteManagerImpl.
+     */
+//        @Test
+//    public void checkEcritureComptableUnitRG3WhenOneLigne() throws Exception {
+//
+//        // 1 ligne Mais a déjà une validation ! MOCK 1 ecrirure avec une Ligne
+//        thrownException.expect(FunctionalException.class);
+//        thrownException.expectMessage(containsString("000 "));
+//
+//        JournalComptable vJournalComptable;
+//        vJournalComptable = new JournalComptable();
+//        vJournalComptable.setCode("AC");
+//        vJournalComptable.setLibelle("Achat");
+//
+//        EcritureComptable vEcritureComptable;
+//        vEcritureComptable = new EcritureComptable();
+//        vEcritureComptable.setJournal(vJournalComptable);
+//        vEcritureComptable.setDate(new Date());
+//        String pReference = "AC-2020/00001";
+//        vEcritureComptable.setReference(pReference);
+//        vEcritureComptable.setLibelle("Libelle");
+//        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+//                null, new BigDecimal(123),
+//                null));
+//        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+//                null, new BigDecimal(123),
+//                new BigDecimal(246)));
+//        
+//        
+//       Validator validator  = Mockito.mock(Validator.class);
+//       Mockito.doCallRealMethod().doReturn(validator).when((AbstractBusinessManager) managerImpl).getConstraintValidator();
+//      
+//       Set<ConstraintViolation<EcritureComptable>> vViolations  = Mockito.mock(Set.class);
+//       doReturn(vViolations).when(validator).validate(ecritureComptable);
+//       doReturn(Boolean.TRUE).when(vViolations).isEmpty();
+//        
+//        doReturn(Boolean.FALSE).when(ecritureComptable).isEquilibree();
+//        
+//        List<LigneEcritureComptable> listLigneEcriture = Mockito.mock(List.class);
+//        doReturn(listLigneEcriture).when(ecritureComptable).getListLigneEcriture();
+//        doReturn(1).when(listLigneEcriture).size();
+//        
+//        verify(validator).validate(ecritureComptable);
+//        
+//        manager.checkEcritureComptableUnit(ecritureComptable);
+//
+//    }
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG3), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableUnitRG3() throws Exception {
+    public void checkEcritureComptableUnitRG3WhenOneLigneWithTwoNull() throws Exception {
 
-        // 2 null ds 1 ligne
         thrownException.expect(FunctionalException.class);
-        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit."));
+        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes : une ligne avec un débit et une ligne avec un crédit."));
 
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -150,18 +205,20 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG3), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableUnitRG3Bis() throws Exception {
+    public void checkEcritureComptableUnitRG3WhenOneLigneWithOneCreditAndOneDebit() throws Exception {
 
-        // un credit & un debit meme ligne
         thrownException.expect(FunctionalException.class);
-        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit."));
+        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes avec une ligne avec un débit et une ligne avec un crédit."));
 
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -180,18 +237,20 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG3), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableUnitRG3TER() throws Exception {
+    public void checkEcritureComptableUnitRG3WhenTwoLigneWithTwoDebit() throws Exception {
 
-        // 2 ligne avec 2 debits
         thrownException.expect(FunctionalException.class);
-        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit."));
+        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes avec une ligne avec un débit et une ligne avec un crédit."));
 
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -210,38 +269,12 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG5), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableUnitRG3QUAT() throws Exception {
-
-        // 1 ligne Mais a déjà une validation !
-        thrownException.expect(FunctionalException.class);
-        thrownException.expectMessage(containsString("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit."));
-
-        JournalComptable vJournalComptable;
-        vJournalComptable = new JournalComptable();
-        vJournalComptable.setCode("AC");
-        vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
-
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(vJournalComptable);
-        vEcritureComptable.setDate(new Date());
-        String pReference = "AC-2020/00001";
-        vEcritureComptable.setReference(pReference);
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                null, new BigDecimal(123),
-                new BigDecimal(246)));
-        manager.checkEcritureComptableUnit(vEcritureComptable);
-
-    }
-
-    @Test
-    public void checkEcritureComptableUnitRG5() throws Exception {
+    public void checkDateEcritureComptableUnitRG5() throws Exception {
 
         thrownException.expect(FunctionalException.class);
         thrownException.expectMessage(containsString("L'année de la date de l'écriture comptable ne correspond pas à l'année dans la référence."));
@@ -250,34 +283,14 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(vJournalComptable);
+
         vEcritureComptable.setDate(new Date());
         String pReference = "AC-2011/00001";
-        vEcritureComptable.setReference(pReference);
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, null,
-                new BigDecimal(123)));
 
-        manager.checkEcritureComptableUnit(vEcritureComptable);
-
-        thrownException.expect(FunctionalException.class);
-        thrownException.expectMessage(containsString("Le code du journal de l'écriture comptable ne correspond pas au code dans la référence."));
-
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(vJournalComptable);
-        vEcritureComptable.setDate(new Date());
-
-        LocalDate localDate = vEcritureComptable.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        pReference = "AB-" + localDate.getYear() + "/00001";
         vEcritureComptable.setReference(pReference);
         vEcritureComptable.setLibelle("Libelle");
         vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
@@ -290,6 +303,10 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    /**
+     * Test of checkEcritureComptableUnit method (step : RG5), of class
+     * ComptabiliteManagerImpl.
+     */
     @Test
     public void checkCodeEcritureComptableUnitRG5() throws Exception {
 
@@ -300,7 +317,6 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -322,11 +338,13 @@ public class ComptabiliteManagerImplTest {
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
 
+    /**
+     * Test of checkEcritureCompableContext() method (step : id != idECRef ), of
+     * class ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableContext() throws Exception {
+    public void checkEcritureCompableContextWhenIdUnLike() throws Exception {
 
-        // check id false 1/2
-        // AC-2016/00001
         thrownException.expect(FunctionalException.class);
         thrownException.expectMessage(containsString("Une autre écriture comptable existe déjà avec la même référence."));
 
@@ -334,7 +352,6 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -361,11 +378,13 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureCompableContext() method (step : id == null ), of
+     * class ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableContext2() throws Exception {
+    public void checkEcritureComptableContextWhenIdNull() throws Exception {
 
-        // check ecritureComptable avec id = null
-        // AC-2016/00001
         thrownException.expect(FunctionalException.class);
         thrownException.expectMessage(containsString("Une autre écriture comptable existe déjà avec la même référence."));
 
@@ -373,7 +392,6 @@ public class ComptabiliteManagerImplTest {
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -399,16 +417,17 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureCompableContext() method (step : NotFoundException
+     * ), of class ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableContext3() throws Exception {
+    public void checkEcritureComptableContextWhenAllGood() throws Exception {
 
-        // ts ok => NotFoundException
-        // AC-2016/00001
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -433,16 +452,17 @@ public class ComptabiliteManagerImplTest {
 
     }
 
+    /**
+     * Test of checkEcritureCompableContext() method (step : id = idECRef), of
+     * class ComptabiliteManagerImpl.
+     */
     @Test
-    public void checkEcritureComptableContext4() throws Exception {
+    public void checkEcritureComptableContextWhenIdEqual() throws Exception {
 
-        // check comparaison id ok 2/2
-        // AC-2016/00001
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
         vJournalComptable.setCode("AC");
         vJournalComptable.setLibelle("Achat");
-        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
@@ -468,134 +488,9 @@ public class ComptabiliteManagerImplTest {
 
     }
 
-    @Test
-    public void addReference() throws Exception {
-
-        // quand i++
-        LocalDate date = LocalDate.now();
-        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(date.getYear(), 00001);
-
-        JournalComptable SampleJournalComptable = new JournalComptable();
-        SampleJournalComptable.setCode("AC");
-        SampleJournalComptable.setLibelle("Achat");
-        SampleJournalComptable.getSequenceEcritureComptable().add(sequenceEcritureComptable);
-
-        List<JournalComptable> DataJournalComptable = new ArrayList<JournalComptable>();
-        DataJournalComptable.add(SampleJournalComptable);
-
-        JournalComptable vJournalComptable;
-        vJournalComptable = new JournalComptable();
-        vJournalComptable.setCode("AC");
-        vJournalComptable.setLibelle("Achat");
-//        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
-
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(vJournalComptable);
-        vEcritureComptable.setDate(new Date());
-        String pReference = "AC-2016/00001";
-        vEcritureComptable.setReference(pReference);
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, null,
-                new BigDecimal(123)));
-
-        doReturn(DataJournalComptable).when(managerImpl).getListJournalComptable();
-        doNothing().when(managerImpl).insertSequenceEcritureComptable(ArgumentMatchers.isA(SequenceEcritureComptable.class));
-
-        managerImpl.addReference(vEcritureComptable);
-
-        assertEquals("AC-" + date.getYear() + "/00002", vEcritureComptable.getReference());
-
-    }
-
-    @Test
-    public void addReference2() throws Exception {
-
-        // quand liste sequence vide
-        JournalComptable SampleJournalComptable = new JournalComptable();
-        SampleJournalComptable.setCode("AC");
-        SampleJournalComptable.setLibelle("Achat");
-
-        List<JournalComptable> DataJournalComptable = new ArrayList<JournalComptable>();
-        DataJournalComptable.add(SampleJournalComptable);
-
-        JournalComptable vJournalComptable;
-        vJournalComptable = new JournalComptable();
-        vJournalComptable.setCode("AC");
-        vJournalComptable.setLibelle("Achat");
-
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(vJournalComptable);
-        vEcritureComptable.setDate(new Date());
-        String pReference = "AC-2016/00001";
-        vEcritureComptable.setReference(pReference);
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, null,
-                new BigDecimal(123)));
-
-        doReturn(DataJournalComptable).when(managerImpl).getListJournalComptable();
-        doNothing().when(managerImpl).insertSequenceEcritureComptable(ArgumentMatchers.isA(SequenceEcritureComptable.class));
-
-        managerImpl.addReference(vEcritureComptable);
-
-        LocalDate date = LocalDate.now();
-        assertEquals("AC-" + date.getYear() + "/00001", vEcritureComptable.getReference());
-
-    }
-
-    @Test
-    public void addReference3() throws Exception {
-
-        // quand liste sequence vide  car pas de séquence pour l'année en cours 2016/2020
-        SequenceEcritureComptable sequenceEcritureComptable = new SequenceEcritureComptable(2016, 00002);
-
-        JournalComptable SampleJournalComptable = new JournalComptable();
-        SampleJournalComptable.setCode("AC");
-        SampleJournalComptable.setLibelle("Achat");
-        SampleJournalComptable.getSequenceEcritureComptable().add(sequenceEcritureComptable);
-
-        List<JournalComptable> DataJournalComptable = new ArrayList<JournalComptable>();
-        DataJournalComptable.add(SampleJournalComptable);
-
-        JournalComptable vJournalComptable;
-        vJournalComptable = new JournalComptable();
-        vJournalComptable.setCode("AC");
-        vJournalComptable.setLibelle("Achat");
-//        vJournalComptable.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
-
-        EcritureComptable vEcritureComptable;
-        vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setJournal(vJournalComptable);
-        vEcritureComptable.setDate(new Date());
-        String pReference = "AC-2016/00001";
-        vEcritureComptable.setReference(pReference);
-        vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, new BigDecimal(123),
-                null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                null, null,
-                new BigDecimal(123)));
-
-        doReturn(DataJournalComptable).when(managerImpl).getListJournalComptable();
-        doNothing().when(managerImpl).insertSequenceEcritureComptable(ArgumentMatchers.isA(SequenceEcritureComptable.class));
-
-        managerImpl.addReference(vEcritureComptable);
-
-        LocalDate date = LocalDate.now();
-        assertEquals("AC-" + date.getYear() + "/00001", vEcritureComptable.getReference());
-
-    }
-
+    /**
+     * Test of checkEcritureComptable(), of class ComptabiliteManagerImpl.
+     */
     @Test
     public void checkEcritureComptable() throws Exception {
 
@@ -629,5 +524,4 @@ public class ComptabiliteManagerImplTest {
         managerImpl.checkEcritureComptable(vEcritureComptable);
 
     }
-
 }

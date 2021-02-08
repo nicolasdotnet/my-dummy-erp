@@ -7,31 +7,34 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.TransactionManager;
 
-
 /**
  * Registre des Beans Spring.
  */
 public final class SpringRegistry {
 
-    /** Logger Log4j pour la classe */
+    /**
+     * Logger Log4j pour la classe
+     */
     private static final Logger LOGGER = LogManager.getLogger(SpringRegistry.class);
 
-
-    /** Instance unique de la classe (design pattern Singleton) */
+    /**
+     * Instance unique de la classe (design pattern Singleton)
+     */
     private static final SpringRegistry INSTANCE = new SpringRegistry();
 
-
-    /** Nom des fichiers de contexte de l'application */
+    /**
+     * Nom des fichiers de contexte de l'application
+     */
     private static final String CONTEXT_APPLI_LOCATION
-        = "classpath:/com/dummy/myerp/testbusiness/business/bootstrapContext.xml";
+            = "classpath:/com/dummy/myerp/testbusiness/business/bootstrapContext.xml";
 
-    /** Le context spring de l'application */
+
+    /**
+     * Le context spring de l'application
+     */
     private ApplicationContext contextAppli;
 
-
     // ==================== ID des Beans Spring ====================
-
-
     /**
      * Constructeur.
      */
@@ -74,7 +77,6 @@ public final class SpringRegistry {
         return vBean;
     }
 
-
     /**
      * Renvoie l'instance de {@link BusinessProxy} de l'application
      *
@@ -83,7 +85,6 @@ public final class SpringRegistry {
     public static BusinessProxy getBusinessProxy() {
         return (BusinessProxy) SpringRegistry.getBean("BusinessProxy");
     }
-
 
     /**
      * Renvoie l'instance de {@link TransactionManager} de l'application

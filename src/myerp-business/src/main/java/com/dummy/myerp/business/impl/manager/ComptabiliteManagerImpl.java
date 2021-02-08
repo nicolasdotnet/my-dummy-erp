@@ -58,9 +58,18 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
+    @Override
+    public SequenceEcritureComptable getSequenceByYearandJournalCode(Integer pAnnee, String pJournalCode) throws Exception {
+        return getDaoProxy().getComptabiliteDao().getSequenceByYearandJournalCode(pAnnee, pJournalCode);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     // TODO à tester
     @Override
-    public synchronized void addReference(EcritureComptable pEcritureComptable) {
+    public synchronized void addReference(EcritureComptable pEcritureComptable) throws FunctionalException {
         // TODO à implémenter
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
@@ -75,69 +84,76 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         (table sequence_ecriture_comptable)
          */
 
-        // 1
+        // step 1
         JournalComptable journal = pEcritureComptable.getJournal();
 
         LocalDate localDate = pEcritureComptable.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
+        System.out.println("addREF : " + localDate.toString());
+
         String vReference = null;
+
+        int vNouvelleValeur;
 
         SequenceEcritureComptable vNouvSequenceEcriture = new SequenceEcritureComptable();
 
-        List<JournalComptable> listJournalComptable = getListJournalComptable();
+        SequenceEcritureComptable vSequenceEcritureFind = null;
 
-        for (JournalComptable journalComptable : listJournalComptable) {
+        try {
 
-            if (journalComptable.getCode().equals(journal.getCode())) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                List<SequenceEcritureComptable> vSequenceEcritureComptable = journalComptable.getSequenceEcritureComptable();
+            vSequenceEcritureFind = getSequenceByYearandJournalCode(localDate.getYear(), journal.getCode());
 
-                int lastIndexOf = vSequenceEcritureComptable.size();
+        } catch (Exception ex) {
 
-                // 2
-                if (lastIndexOf == 0) {
+            System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+            // step 2 -> i=1
+            vNouvelleValeur = 1;
 
-                    // 3
-                    vReference = journal.getCode() + "-" + localDate.getYear() + "/" + "00001";
-                    pEcritureComptable.setReference(vReference);
+            // step 3
+            vReference = journal.getCode() + "-" + localDate.getYear() + "/" + String.format("%05d", vNouvelleValeur);
 
-                    vNouvSequenceEcriture.setAnnee(localDate.getYear());
-                    vNouvSequenceEcriture.setDerniereValeur(00001);
+            pEcritureComptable.setReference(vReference);
 
-                } else {
+            System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMV");
 
-                    SequenceEcritureComptable vAncSequenceEcriture = vSequenceEcritureComptable.get(lastIndexOf - 1);
+            this.updateEcritureComptable(pEcritureComptable);
 
-                    Integer annee = vAncSequenceEcriture.getAnnee();
+            System.out.println("55555555555555555555555V");
 
-                    if (annee == localDate.getYear()) {
+            // step 4
+            vNouvSequenceEcriture.setJournalCode(journal.getCode());
+            vNouvSequenceEcriture.setAnnee(localDate.getYear());
+            vNouvSequenceEcriture.setDerniereValeur(vNouvelleValeur);
 
-                        Integer vDerniereValeur = vAncSequenceEcriture.getDerniereValeur();
+            this.insertSequenceEcritureComptable(vNouvSequenceEcriture);
 
-                        vReference = journal.getCode() + "-" + localDate.getYear() + "/" + String.format("%05d", ++vDerniereValeur);
+        }
 
-                        pEcritureComptable.setReference(vReference);
+        if (vSequenceEcritureFind != null) {
 
-                        vNouvSequenceEcriture.setAnnee(localDate.getYear());
-                        vNouvSequenceEcriture.setDerniereValeur(vDerniereValeur + 1);
-                    } else {
+            System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyy");
+            // step 2 bis -> i++
+            vNouvelleValeur = vSequenceEcritureFind.getDerniereValeur() + 1;
+            System.out.println("DERNIERE VALEUR : " + vNouvelleValeur);
 
-                        pEcritureComptable.getDate();
+            // step 3
+            vReference = journal.getCode() + "-" + localDate.getYear() + "/" + String.format("%05d", vNouvelleValeur);
 
-                        vReference = journal.getCode() + "-" + localDate.getYear() + "/" + "00001";
+            System.out.println("vREFERECE : " + vReference);
 
-                        pEcritureComptable.setReference(vReference);
+            pEcritureComptable.setReference(vReference);
 
-                        vNouvSequenceEcriture.setAnnee(localDate.getYear());
-                        vNouvSequenceEcriture.setDerniereValeur(1);
+            this.updateEcritureComptable(pEcritureComptable);
 
-                    }
-                }
+            // step 4
+            vNouvSequenceEcriture.setJournalCode(journal.getCode());
+            vNouvSequenceEcriture.setAnnee(localDate.getYear());
+            vNouvSequenceEcriture.setDerniereValeur(vNouvelleValeur);
 
-                //TODO persitance SéquenceEcriture
-                insertSequenceEcritureComptable(vNouvSequenceEcriture);
+            this.updateSequenceEcritureComptable(vNouvSequenceEcriture);
 
-            }
         }
 
     }
@@ -182,11 +198,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
             // l'écriture comptable doit contenir 2 lignes
             throw new FunctionalException(
-                    "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+                    "L'écriture comptable doit avoir au moins deux lignes.");
         }
-
-        int vNbrCreditEcritureComptable = 0;
-        int vNbrDebitEcritureComptable = 0;
 
         for (LigneEcritureComptable vLigneEcritureComptable : pEcritureComptable.getListLigneEcriture()) {
 
@@ -209,35 +222,22 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
                 // une ligne avec que des null
                 throw new FunctionalException(
-                        "A L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+                        "L'écriture comptable doit avoir au moins deux lignes : une ligne avec un débit et une ligne avec un crédit.");
             }
 
             if (vNbrCredit == 1 && vNbrDebit == 1) {
 
                 // une ligne avec un credit et un debit
                 throw new FunctionalException(
-                        " B L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+                        " L'écriture comptable doit avoir au moins deux lignes avec une ligne avec un débit et une ligne avec un crédit.");
             }
-
-            vNbrCreditEcritureComptable = +vNbrCredit;
-            vNbrDebitEcritureComptable = +vNbrDebit;
-
-        }
-        // On test le nombre de lignes car si l'écriture à une seule ligne
-        //      avec un montant au débit et un montant au crédit ce n'est pas valable
-
-        if (vNbrCreditEcritureComptable >= 2 || vNbrDebitEcritureComptable >= 2) {
-
-            // 2 lignes avec soit 2 credits ou soit 2 debits
-            throw new FunctionalException(
-                    "C L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
         // RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
 
         LocalDate localDate = pEcritureComptable.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        // vérif année ref avec année écriture
+        // vérifier année ref avec année écriture
         Pattern pattern = Pattern.compile("-" + localDate.getYear());
         Matcher matcher = pattern.matcher(pEcritureComptable.getReference());
 
@@ -247,7 +247,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         }
 
-        // vérif code ref avec code journal
+        // vérifier code ref avec code journal
         pattern = Pattern.compile(pEcritureComptable.getJournal().getCode() + "-");
         matcher = pattern.matcher(pEcritureComptable.getReference());
 
@@ -280,6 +280,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 // c'est qu'il y a déjà une autre écriture avec la même référence
                 if (pEcritureComptable.getId() == null
                         || !pEcritureComptable.getId().equals(vECRef.getId())) {
+
+                    System.out.println("pEcritureComptable.getId() : " + pEcritureComptable.getId());
+                    System.out.println("vECRef.getId() : " + vECRef.getId());
                     throw new FunctionalException("Une autre écriture comptable existe déjà avec la même référence.");
                 }
             } catch (NotFoundException vEx) {
@@ -340,6 +343,19 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
             getDaoProxy().getComptabiliteDao().insertSequenceEcritureComptable(sequenceEcritureComptable);
+            getTransactionManager().commitMyERP(vTS);
+            vTS = null;
+        } finally {
+            getTransactionManager().rollbackMyERP(vTS);
+        }
+    }
+
+    @Override
+    public void updateSequenceEcritureComptable(SequenceEcritureComptable vNouvSequenceEcriture) {
+
+        TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
+        try {
+            getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(vNouvSequenceEcriture);
             getTransactionManager().commitMyERP(vTS);
             vTS = null;
         } finally {

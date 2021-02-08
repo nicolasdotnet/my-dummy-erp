@@ -12,9 +12,9 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author pi
+ * @author nicolasdotnet
  */
-public class CompteComptableTest {
+public class CompteComptableUTest {
 
     /**
      * Test of getByNumero method, of class CompteComptable.

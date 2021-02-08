@@ -12,9 +12,9 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author pi
+ * @author nicolasdotnet
  */
-public class JournalComptableTest {
+public class JournalComptableUTest {
 
     /**
      * Test of getByCode method, of class JournalComptable.
@@ -25,13 +25,12 @@ public class JournalComptableTest {
         List<JournalComptable> pList = new ArrayList<JournalComptable>();
         JournalComptable j = new JournalComptable();
 
-        j.setCode("1");
+        j.setCode("AA");
         j.setLibelle("est");
-        j.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
 
         pList.add(j);
 
-        String pCode = "1";
+        String pCode = "AA";
 
         JournalComptable expResult = j;
         JournalComptable result = JournalComptable.getByCode(pList, pCode);
@@ -49,12 +48,11 @@ public class JournalComptableTest {
         List<JournalComptable> pList = new ArrayList<JournalComptable>();
         JournalComptable j = new JournalComptable();
 
-        j.setCode("1");
+        j.setCode("AA");
         j.setLibelle("est");
-        j.getSequenceEcritureComptable().add(new SequenceEcritureComptable(2020, 00001));
         pList.add(j);
 
-        String pCode = "0";
+        String pCode = "BB";
         JournalComptable expResult = null;
         JournalComptable result = JournalComptable.getByCode(pList, pCode);
         assertEquals(expResult, result);

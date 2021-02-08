@@ -43,8 +43,24 @@
 
 
     <!-- ==================== Databases ==================== -->
-    <bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">
+    
+    <!--<bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">
         <constructor-arg value="javax.sql.DataSource"/>
+    </bean> -->
+    
+    <!-- ==================== Databases 2 ==================== -->
+    <bean
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:/com/dummy/myerp/consumer/database.properties</value>
+        </property>
+    </bean>
+
+   <bean id="dataSourceMYERP" class="org.springframework.jdbc.datasource.DriverManagerDataSource">      
+        <property name="url" value="jdbc:postgresql://127.0.0.1:9032/db_myerp" />
+        <property name="username" value="usr_myerp" />
+        <property name="password" value="myerp" />
+        <property name="driverClassName" value="org.postgresql.Driver" />
     </bean>
 
 
