@@ -21,14 +21,17 @@ import static org.hamcrest.CoreMatchers.containsString;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author nicolasdotnet
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ComptabiliteDaoImplITest {
 
     @Rule
@@ -89,7 +92,7 @@ public class ComptabiliteDaoImplITest {
         System.out.println("getListEcritureComptable");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
-        int expResult = 5;
+        int expResult = 6;
         List<EcritureComptable> result = instance.getListEcritureComptable();
         assertEquals(expResult, result.size());
     }
@@ -169,7 +172,7 @@ public class ComptabiliteDaoImplITest {
         System.out.println("loadListLigneEcriture");
 
         EcritureComptable pEcritureComptable = new EcritureComptable();
-        pEcritureComptable.setId(-1);
+        pEcritureComptable.setId(-4);
         int expResult = 3;
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
@@ -181,8 +184,8 @@ public class ComptabiliteDaoImplITest {
      * Test of insertEcritureComptable method, of class ComptabiliteDaoImpl.
      */
     @Test
-    public void testInsertEcritureComptable() {
-        System.out.println("insertEcritureComptable");
+    public void testAddEcritureComptable() {
+        System.out.println("addEcritureComptable");
 
         JournalComptable vJournalComptable;
         vJournalComptable = new JournalComptable();
@@ -219,8 +222,8 @@ public class ComptabiliteDaoImplITest {
      * ComptabiliteDaoImpl.
      */
     @Test
-    public void testDeleteListLigneEcritureComptable() {
-        System.out.println("deleteListLigneEcritureComptable");
+    public void testRemoveListLigneEcritureComptable() {
+        System.out.println("removeListLigneEcritureComptable");
 
         Integer pEcritureId = -2;
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
@@ -231,8 +234,8 @@ public class ComptabiliteDaoImplITest {
      * Test of updateEcritureComptable method, of class ComptabiliteDaoImpl.
      */
     @Test
-    public void testUpdateEcritureComptable() throws NotFoundException {
-        System.out.println("updateEcritureComptable");
+    public void testModifyEcritureComptable() throws NotFoundException {
+        System.out.println("modifyEcritureComptable");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
         EcritureComptable vEcritureComptable;
@@ -253,8 +256,8 @@ public class ComptabiliteDaoImplITest {
      * Test of deleteEcritureComptable method, of class ComptabiliteDaoImpl.
      */
     @Test
-    public void testDeleteEcritureComptable() throws NotFoundException {
-        System.out.println("deleteEcritureComptable");
+    public void testRemoveEcritureComptable() throws NotFoundException {
+        System.out.println("removeEcritureComptable");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
         EcritureComptable vEcritureComptable;
@@ -293,8 +296,8 @@ public class ComptabiliteDaoImplITest {
      * ComptabiliteDaoImpl.
      */
     @Test
-    public void testInsertSequenceEcritureComptable() throws Exception {
-        System.out.println("insertSequenceEcritureComptable");
+    public void testAddSequenceEcritureComptable() throws Exception {
+        System.out.println("addSequenceEcritureComptable");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
 
@@ -317,8 +320,8 @@ public class ComptabiliteDaoImplITest {
      * ComptabiliteDaoImpl.
      */
     @Test
-    public void testUpdateSequenceEcritureComptable() throws Exception {
-        System.out.println("updateSequenceEcritureComptable");
+    public void testModifySequenceEcritureComptable() throws Exception {
+        System.out.println("modifySequenceEcritureComptable");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
 
@@ -340,8 +343,8 @@ public class ComptabiliteDaoImplITest {
      * ComptabiliteDaoImpl.
      */
     @Test
-    public void testDeleteSequenceEcrituree() {
-        System.out.println("deleteSequenceEcriture");
+    public void testRemoveSequenceEcrituree() {
+        System.out.println("removeSequenceEcriture");
 
         ComptabiliteDaoImpl instance = ComptabiliteDaoImpl.getInstance();
 

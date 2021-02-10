@@ -76,9 +76,9 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
         (table sequence_ecriture_comptable)
         2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
-        1. Utiliser le numéro 1.
+            1. Utiliser le numéro 1.
          * Sinon :
-        1. Utiliser la dernière valeur + 1
+            2. Utiliser la dernière valeur + 1
         3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
         4.  Enregistrer (insert/update) la valeur de la séquence en persitance
         (table sequence_ecriture_comptable)
@@ -108,7 +108,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         } catch (Exception ex) {
 
             System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
-            // step 2 -> i=1
+            // step 2.1 i=1
             vNouvelleValeur = 1;
 
             // step 3
@@ -134,7 +134,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         if (vSequenceEcritureFind != null) {
 
             System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyy");
-            // step 2 bis -> i++
+            // step 2.2 -> i++
             vNouvelleValeur = vSequenceEcritureFind.getDerniereValeur() + 1;
             System.out.println("DERNIERE VALEUR : " + vNouvelleValeur);
 
@@ -143,9 +143,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
             System.out.println("vREFERECE : " + vReference);
 
+            // Attention :l'écriture n'est pas enregistrée en persistance -> Javadoc interface
             pEcritureComptable.setReference(vReference);
 
-            this.updateEcritureComptable(pEcritureComptable);
+//            this.updateEcritureComptable(pEcritureComptable);
 
             // step 4
             vNouvSequenceEcriture.setJournalCode(journal.getCode());
