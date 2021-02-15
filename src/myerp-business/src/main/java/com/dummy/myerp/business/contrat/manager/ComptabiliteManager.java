@@ -105,8 +105,8 @@ public interface ComptabiliteManager {
      * @param sequenceEcritureComptable
      */
     void insertSequenceEcritureComptable(SequenceEcritureComptable sequenceEcritureComptable);
-    
-        /**
+
+    /**
      * Update une séquence d'écriture comptable.
      *
      * @param vNouvSequenceEcriture

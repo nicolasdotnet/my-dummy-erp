@@ -6,7 +6,6 @@
 package com.dummy.myerp.consumer.dao.impl.db.dao;
 
 import static com.dummy.myerp.consumer.ConsumerHelper.getDaoProxy;
-import com.dummy.myerp.consumer.db.DataSourcesEnum;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
@@ -42,10 +41,6 @@ public class ComptabiliteDaoImplITest {
 
         try (ClassPathXmlApplicationContext context
                 = new ClassPathXmlApplicationContext("com/dummy/myerp/consumer/applicationContext.xml")) {
-
-            DataSourcesEnum compteComponant = context.getBean(DataSourcesEnum.class);
-
-            System.out.println(compteComponant);
 
         } catch (Exception e) {
 

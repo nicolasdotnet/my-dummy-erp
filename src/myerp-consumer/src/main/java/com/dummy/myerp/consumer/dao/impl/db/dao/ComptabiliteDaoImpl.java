@@ -62,18 +62,10 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     @Override
     public List<CompteComptable> getListCompteComptable() {
 
-        System.out.println("OOOOOOOOOOOPENNNNNNNNNNNNNNNNn");
-
-        System.out.println("XXXXXXXXXXXXXXXx : " + this.getDataSource(DataSourcesEnum.MYERP));
-
         JdbcTemplate vJdbcTemplate = new JdbcTemplate(this.getDataSource(DataSourcesEnum.MYERP));
 
-        System.out.println("AAAAAAAAAAAAAa : JdbcTem : " + vJdbcTemplate);
-
         CompteComptableRM vRM = new CompteComptableRM();
-
-        System.out.println("BBBBBBBBBBBBB : vRM : " + vJdbcTemplate);
-
+        
         List<CompteComptable> vList = vJdbcTemplate.query(SQLgetListCompteComptable, vRM);
         return vList;
     }
@@ -230,24 +222,16 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
         NamedParameterJdbcTemplate vJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(DataSourcesEnum.MYERP));
         MapSqlParameterSource vSqlParams = new MapSqlParameterSource();
         
-        System.out.println("ecriture_id"+pEcritureComptable.getId() );
         vSqlParams.addValue("ecriture_id", pEcritureComptable.getId());
 
         int vLigneId = 0;
         for (LigneEcritureComptable vLigne : pEcritureComptable.getListLigneEcriture()) {
             vLigneId++;
             
-            System.out.println("ligne_id"+ vLigneId);
             vSqlParams.addValue("ligne_id", vLigneId);
-            System.out.println("compte_comptable_numero"+ vLigne.getCompteComptable().getNumero());
             vSqlParams.addValue("compte_comptable_numero", vLigne.getCompteComptable().getNumero());
-            
-            System.out.println("libelle"+ vLigne.getLibelle());
-            
             vSqlParams.addValue("libelle", vLigne.getLibelle());
-            System.out.println("debit"+ vLigne.getDebit());
             vSqlParams.addValue("debit", vLigne.getDebit());
-            System.out.println("credit"+ vLigne.getCredit());
             vSqlParams.addValue("credit", vLigne.getCredit());
 
             vJdbcTemplate.update(SQLinsertListLigneEcritureComptable, vSqlParams);

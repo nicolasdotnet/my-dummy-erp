@@ -7,7 +7,6 @@ package com.dummy.myerp.business.impl.manager;
 
 import static com.dummy.myerp.consumer.ConsumerHelper.getDaoProxy;
 import com.dummy.myerp.consumer.dao.impl.db.dao.ComptabiliteDaoImpl;
-import com.dummy.myerp.consumer.db.DataSourcesEnum;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
@@ -15,7 +14,6 @@ import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -39,13 +37,9 @@ public class ComptabiliteManagerImplITest {
         try (ClassPathXmlApplicationContext context
                 = new ClassPathXmlApplicationContext("com/dummy/myerp/business/applicationContext.xml")) {
 
-            DataSourcesEnum compteComponant = context.getBean(DataSourcesEnum.class);
-
-            System.out.println(compteComponant);
-
         } catch (Exception e) {
-
-            System.out.println("HELLLOOOOO" + e.getMessage());
+            
+             System.out.println(e.getMessage());
 
         }
 
@@ -110,8 +104,6 @@ public class ComptabiliteManagerImplITest {
 
         vEcritureComptable.setDate(new Date());
 
-        System.out.println(new Date().toString());
-
         LocalDate date = LocalDate.now();
         String pReference = "VE-" + date.getYear() + "/00001";
         vEcritureComptable.setReference(pReference);
@@ -167,7 +159,7 @@ public class ComptabiliteManagerImplITest {
         LocalDate localDate = LocalDate.now();
         EcritureComptable eb = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef("VE-" + localDate.getYear() + "/00001");
         Integer pId = eb.getId();
-//        Integer pId = 1;
+        
         instance.deleteEcritureComptable(pId);
 
     }
@@ -190,23 +182,13 @@ public class ComptabiliteManagerImplITest {
         vJournalComptable.setLibelle("Achat");
 
         EcritureComptable pEcritureComptable = new EcritureComptable();
-//        pEcritureComptable.setId(-6);
         pEcritureComptable.setJournal(vJournalComptable);
         pEcritureComptable.setDate(d);
 
         pEcritureComptable.setLibelle("ReferenceInitial");
-//        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
-//                null, new BigDecimal(123),
-//                null));
-//        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(411),
-//                null, null,
-//                new BigDecimal(123)));
 
         ComptabiliteManagerImpl instance = new ComptabiliteManagerImpl();
         instance.addReference(pEcritureComptable);
-
-//        EcritureComptable ec = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef("AC-" + date.getYear() + "/00001");
-//        assertEquals("AC-" + date.getYear() + "/00001", ec.getReference());
 
         SequenceEcritureComptable sec = getDaoProxy().getComptabiliteDao().getSequenceByYearandJournalCode(date.getYear(), "AC");
         assertEquals(1, (int) sec.getDerniereValeur());
@@ -221,12 +203,6 @@ public class ComptabiliteManagerImplITest {
     public void testAddReferenceSecondAndMore() throws Exception {
         System.out.println("addReference");
 
-//        LocalDate localDate = LocalDate.of(2016, Month.MARCH, 23);
-//
-//        Date d = Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-//
-//        System.out.println("d : " + d.toString());
-
         LocalDate date = LocalDate.now();
         Date d = new Date();
         d.from(date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
@@ -237,28 +213,17 @@ public class ComptabiliteManagerImplITest {
         vJournalComptable.setLibelle("Achat");
 
         EcritureComptable pEcritureComptable = new EcritureComptable();
-//        pEcritureComptable.setId(-6);
         pEcritureComptable.setJournal(vJournalComptable);
         pEcritureComptable.setDate(d);
 
         pEcritureComptable.setLibelle("ReferenceIncrement");
-//        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(401),
-//                null, new BigDecimal(123),
-//                null));
-//        pEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(411),
-//                null, null,
-//                new BigDecimal(123)));
 
         ComptabiliteManagerImpl instance = new ComptabiliteManagerImpl();
         instance.addReference(pEcritureComptable);
-//
-//        EcritureComptable ec = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef("AC-" + date.getYear() + "/00002");
-//        assertEquals("AC-" + date.getYear() + "/00002", ec.getReference());
 
         SequenceEcritureComptable sec = getDaoProxy().getComptabiliteDao().getSequenceByYearandJournalCode( date.getYear(), "AC");
         assertEquals(2, (int) sec.getDerniereValeur());
         
-//        getDaoProxy().getComptabiliteDao().deleteEcritureComptable(ec.getId());
         getDaoProxy().getComptabiliteDao().deleteSequenceEcritureComptable(sec);
 
     }

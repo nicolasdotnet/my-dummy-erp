@@ -54,13 +54,9 @@ public abstract class AbstractDbConsumer {
      * @return SimpleJdbcTemplate
      */
     protected DataSource getDataSource(DataSourcesEnum pDataSourceId) {
-        
-        System.out.println("DADADADADADADA : "+this.mapDataSource);
-        
-        
+         
         DataSource vRetour = this.mapDataSource.get(pDataSourceId);
-        
-        System.out.println("HHHHHHHHHHHHHHHHH : ");
+
         if (vRetour == null) {
             throw new UnsatisfiedLinkError("La DataSource suivante n'a pas été initialisée : " + pDataSourceId);
         }

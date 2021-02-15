@@ -89,8 +89,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         LocalDate localDate = pEcritureComptable.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-        System.out.println("addREF : " + localDate.toString());
-
         String vReference = null;
 
         int vNouvelleValeur;
@@ -101,13 +99,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         try {
 
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
             vSequenceEcritureFind = getSequenceByYearandJournalCode(localDate.getYear(), journal.getCode());
 
         } catch (Exception ex) {
 
-            System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
             // step 2.1 i=1
             vNouvelleValeur = 1;
 
@@ -116,11 +111,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
             pEcritureComptable.setReference(vReference);
 
-            System.out.println("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMV");
-
             this.updateEcritureComptable(pEcritureComptable);
-
-            System.out.println("55555555555555555555555V");
 
             // step 4
             vNouvSequenceEcriture.setJournalCode(journal.getCode());
@@ -133,20 +124,14 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         if (vSequenceEcritureFind != null) {
 
-            System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyy");
             // step 2.2 -> i++
             vNouvelleValeur = vSequenceEcritureFind.getDerniereValeur() + 1;
-            System.out.println("DERNIERE VALEUR : " + vNouvelleValeur);
 
             // step 3
             vReference = journal.getCode() + "-" + localDate.getYear() + "/" + String.format("%05d", vNouvelleValeur);
 
-            System.out.println("vREFERECE : " + vReference);
-
             // Attention :l'écriture n'est pas enregistrée en persistance -> Javadoc interface
             pEcritureComptable.setReference(vReference);
-
-//            this.updateEcritureComptable(pEcritureComptable);
 
             // step 4
             vNouvSequenceEcriture.setJournalCode(journal.getCode());
@@ -282,8 +267,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 if (pEcritureComptable.getId() == null
                         || !pEcritureComptable.getId().equals(vECRef.getId())) {
 
-                    System.out.println("pEcritureComptable.getId() : " + pEcritureComptable.getId());
-                    System.out.println("vECRef.getId() : " + vECRef.getId());
                     throw new FunctionalException("Une autre écriture comptable existe déjà avec la même référence.");
                 }
             } catch (NotFoundException vEx) {

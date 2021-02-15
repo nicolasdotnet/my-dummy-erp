@@ -128,55 +128,6 @@ public class ComptabiliteManagerImplUTest {
      * Test of checkEcritureComptableUnit method (step : RG3), of class
      * ComptabiliteManagerImpl.
      */
-//        @Test
-//    public void checkEcritureComptableUnitRG3WhenOneLigne() throws Exception {
-//
-//        // 1 ligne Mais a déjà une validation ! MOCK 1 ecrirure avec une Ligne
-//        thrownException.expect(FunctionalException.class);
-//        thrownException.expectMessage(containsString("000 "));
-//
-//        JournalComptable vJournalComptable;
-//        vJournalComptable = new JournalComptable();
-//        vJournalComptable.setCode("AC");
-//        vJournalComptable.setLibelle("Achat");
-//
-//        EcritureComptable vEcritureComptable;
-//        vEcritureComptable = new EcritureComptable();
-//        vEcritureComptable.setJournal(vJournalComptable);
-//        vEcritureComptable.setDate(new Date());
-//        String pReference = "AC-2020/00001";
-//        vEcritureComptable.setReference(pReference);
-//        vEcritureComptable.setLibelle("Libelle");
-//        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-//                null, new BigDecimal(123),
-//                null));
-//        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-//                null, new BigDecimal(123),
-//                new BigDecimal(246)));
-//        
-//        
-//       Validator validator  = Mockito.mock(Validator.class);
-//       Mockito.doCallRealMethod().doReturn(validator).when((AbstractBusinessManager) managerImpl).getConstraintValidator();
-//      
-//       Set<ConstraintViolation<EcritureComptable>> vViolations  = Mockito.mock(Set.class);
-//       doReturn(vViolations).when(validator).validate(ecritureComptable);
-//       doReturn(Boolean.TRUE).when(vViolations).isEmpty();
-//        
-//        doReturn(Boolean.FALSE).when(ecritureComptable).isEquilibree();
-//        
-//        List<LigneEcritureComptable> listLigneEcriture = Mockito.mock(List.class);
-//        doReturn(listLigneEcriture).when(ecritureComptable).getListLigneEcriture();
-//        doReturn(1).when(listLigneEcriture).size();
-//        
-//        verify(validator).validate(ecritureComptable);
-//        
-//        manager.checkEcritureComptableUnit(ecritureComptable);
-//
-//    }
-    /**
-     * Test of checkEcritureComptableUnit method (step : RG3), of class
-     * ComptabiliteManagerImpl.
-     */
     @Test
     public void checkEcritureComptableUnitRG3WhenOneLigneWithTwoNull() throws Exception {
 
@@ -368,7 +319,6 @@ public class ComptabiliteManagerImplUTest {
                 null, null,
                 new BigDecimal(123)));
 
-//        Mockito.doCallRealMethod().doReturn(daoProxy).when((AbstractBusinessManager) managerImpl).getDaoProxy();
         doReturn(daoProxy).when(managerImpl).getDaoProxy();
         doReturn(comptabiliteDao).when(daoProxy).getComptabiliteDao();
         doReturn(ecritureComptable).when(comptabiliteDao).getEcritureComptableByRef(pReference);
@@ -408,7 +358,6 @@ public class ComptabiliteManagerImplUTest {
                 null, null,
                 new BigDecimal(123)));
 
-//        Mockito.doCallRealMethod().doReturn(daoProxy).when((AbstractBusinessManager) managerImpl).getDaoProxy();
         doReturn(daoProxy).when(managerImpl).getDaoProxy();
         doReturn(comptabiliteDao).when(daoProxy).getComptabiliteDao();
         doReturn(ecritureComptable).when(comptabiliteDao).getEcritureComptableByRef(pReference);
