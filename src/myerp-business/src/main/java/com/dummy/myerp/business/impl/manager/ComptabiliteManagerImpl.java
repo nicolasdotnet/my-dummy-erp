@@ -18,6 +18,7 @@ import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.regex.Matcher;
@@ -109,9 +110,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             // step 3
             vReference = journal.getCode() + "-" + localDate.getYear() + "/" + String.format("%05d", vNouvelleValeur);
 
+            // Attention :l'écriture n'est pas enregistrée en persistance -> Javadoc interface
             pEcritureComptable.setReference(vReference);
-
-            this.updateEcritureComptable(pEcritureComptable);
 
             // step 4
             vNouvSequenceEcriture.setJournalCode(journal.getCode());
@@ -165,7 +165,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     // TODO tests à compléter
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
-        // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
+        // ===== Vérification des contraintes unitaires sur les attributs de l'écriture        
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
         if (!vViolations.isEmpty()) {
             throw new FunctionalException("L'écriture comptable ne respecte pas les règles de gestion.",
@@ -221,10 +221,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         // RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
 
-        LocalDate localDate = pEcritureComptable.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String vYears = new SimpleDateFormat("yyyy").format(pEcritureComptable.getDate());
 
         // vérifier année ref avec année écriture
-        Pattern pattern = Pattern.compile("-" + localDate.getYear());
+        Pattern pattern = Pattern.compile("-" + vYears);
         Matcher matcher = pattern.matcher(pEcritureComptable.getReference());
 
         if (!matcher.find()) {
@@ -296,6 +296,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      */
     @Override
     public void updateEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+        this.checkEcritureComptable(pEcritureComptable);
         TransactionStatus vTS = getTransactionManager().beginTransactionMyERP();
         try {
             getDaoProxy().getComptabiliteDao().updateEcritureComptable(pEcritureComptable);
