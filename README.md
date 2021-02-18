@@ -38,4 +38,33 @@ Il comporte :
     docker-compose stop
     docker-compose rm -v
     docker-compose up
-# my-dummy-erp
+
+## Exécuter les tests
+
+### Tests unitaires
+
+```
+cd src
+mvn clean test -Ptests-UT
+```
+
+### Tests d'intégration
+A la suite des tests unitaires :
+
+```
+mvn clean test -Ptests-IT
+```
+
+### L'ensemble des tests
+A la suite des tests d'intégration :
+
+```
+mvn clean test
+```
+
+## Automatiser les Tests avec Jenkins
+Un document concernant la configuration du serveur Jenkins par l'interface graphique est disponible ici : 
+
+```
+doc/jenkins.pdf.
+```
