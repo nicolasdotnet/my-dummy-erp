@@ -10,5 +10,7 @@ package com.dummy.myerp.technical.exception;
  * @author nicolasdotnet
  */
 public class Commit {
+
+// test présentation
     
 }
